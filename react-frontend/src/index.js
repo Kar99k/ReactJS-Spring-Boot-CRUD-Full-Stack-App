@@ -4,6 +4,24 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+
+const stackTrace = [];
+
+function saveStackTrace() {
+  const error = new Error();
+  const stack = error.stack.split('\n').slice(2);
+  
+  stackTrace.push(...stack);
+}
+
+axios.interceptors.request.use((request) =>{
+  console.trace = saveStackTrace;
+  console.trace();
+  console.log(stackTrace);
+  
+  return request;                                                                                                           
+})
 
 ReactDOM.render(
   <React.StrictMode>
